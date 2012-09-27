@@ -202,7 +202,9 @@ var FTScroller, CubicBezier;
 
 			// Set the maximum time (ms) that a fling can take to complete; if
 			// this is not set, flings will complete instantly
-			maxFlingDuration: 1000
+			maxFlingDuration: 1000, 
+
+      preventBubbling: false
 		};
 
 
@@ -1644,7 +1646,7 @@ var FTScroller, CubicBezier;
 				_containerNode._ftscrollerToggle('touchend', _onTouchEnd, true);
 				_containerNode._ftscrollerToggle('touchcancel', _onTouchEnd, true);
 			} else {
-				_containerNode._ftscrollerToggle('mousedown', _onMouseDown, true);
+				_containerNode._ftscrollerToggle('mousedown', _onMouseDown, false);
 				if (!enable) {
 					document.removeEventListener('mousemove', _onMouseMove, true);
 					document.removeEventListener('mouseup', _onMouseUp, true);
@@ -1754,6 +1756,9 @@ var FTScroller, CubicBezier;
 		 * Mouse event handlers
 		 */
 		_onMouseDown = function _onMouseDown(startEvent) {
+      if (_instanceOptions.preventBubbling){
+        startEvent.stopPropagation();
+      }
 
 			// Don't track the right mouse buttons, or a context menu
 			if ((startEvent.button && startEvent.button === 2) || startEvent.ctrlKey) {
